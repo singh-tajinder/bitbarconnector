@@ -2,6 +2,7 @@ import argparse
 import sys
 import time
 import json
+import os
 
 from testdroid import Testdroid
 from testdroid import RequestResponseError
@@ -11,9 +12,7 @@ class bitbar:
     def execute_test(config_file):
         
         config = ConfigParser(allow_no_value=True)
-
         config.read(config_file)
-        bitbar_api_key = config.get('bitbar', 'bitbar_api_key')
         app_file = config.get('bitbar','app_file')
         test_file = config.get('bitbar','test_file')
         osType = config.get('bitbar','osType')
@@ -33,6 +32,7 @@ class bitbar:
         ###############################
         # Upload app and test files
         ###############################
+        bitbar_api_key = os.environ['BITBAR_API_KEY']
         testdroid = Testdroid(apikey=bitbar_api_key, url="https://cloud.bitbar.com")
         app_file_id = testdroid.upload_file(filename=app_file)['id']
         test_file_id = testdroid.upload_file(filename=test_file)['id']

@@ -16,17 +16,11 @@ class bitbar:
     parser = argparse.ArgumentParser(description='Run some tests.')
     parser.add_argument('--api-key', dest='api_key', required=True, help='Bitbar API key')
     parser.add_argument('--config-file', dest='config_file', help='Config file path')
-    parser.add_argument('--app-file', dest='app_file', help='App file path')
-    parser.add_argument('--test-file', dest='test_file', help='Test file path')
 
     args = parser.parse_args()
     testdroid = Testdroid(apikey=args.api_key, url="https://cloud.bitbar.com")
 
-    ###############################
-    # Upload app and test files
-    ###############################
-    app_file_id = testdroid.upload_file(filename=args.app_file)['id']
-    test_file_id = testdroid.upload_file(filename=args.test_file)['id']
+
 
     ###################################
     # Read Bitbar Configuration from ini file
@@ -34,7 +28,7 @@ class bitbar:
 
     config = ConfigParser(allow_no_value=True)
 
-    config.read(args.config_file)
+    config.read("config.ini")
     app_file_name = config.get('bitbar','app_file_name')
     test_file_name = config.get('bitbar','test_file_name')
     osType = config.get('bitbar','osType')
@@ -51,6 +45,11 @@ class bitbar:
     maxTestTimeout_unit_value = config.getint('bitbar','maxTestTimeout_unit_value')
     runAvailable = config.getboolean('bitbar','runAvailable')
 
+    ###############################
+    # Upload app and test files
+    ###############################
+    app_file_id = testdroid.upload_file(filename=args.app_file)['id']
+    test_file_id = testdroid.upload_file(filename=args.test_file)['id']    
     ###############################
     # Launch a test run
     ###############################

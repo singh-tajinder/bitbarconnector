@@ -9,28 +9,12 @@ from configparser import ConfigParser
 
 class bitbar:
         
-    ###################################
-    # Arguments
-    ###################################
-
-    parser = argparse.ArgumentParser(description='Run some tests.')
-    parser.add_argument('--api-key', dest='api_key', required=True, help='Bitbar API key')
-    parser.add_argument('--config-file', dest='config_file', help='Config file path')
-
-    args = parser.parse_args()
-    testdroid = Testdroid(apikey=args.api_key, url="https://cloud.bitbar.com")
-
-
-
-    ###################################
-    # Read Bitbar Configuration from ini file
-    ###################################
-
     config = ConfigParser(allow_no_value=True)
 
-    config.read("config.ini")
-    app_file_name = config.get('bitbar','app_file_name')
-    test_file_name = config.get('bitbar','test_file_name')
+    config.read('config.ini')
+    bitbar_api_key = config.get('bitbar', 'bitbar_api_key')
+    app_file = config.get('bitbar','app_file')
+    test_file = config.get('bitbar','test_file')
     osType = config.get('bitbar','osType')
     instrumentationRunner = config.get('bitbar','instrumentationRunner')
     limitationType = config.get('bitbar','limitationType')
@@ -44,12 +28,14 @@ class bitbar:
     timeout = config.getint('bitbar','timeout')
     maxTestTimeout_unit_value = config.getint('bitbar','maxTestTimeout_unit_value')
     runAvailable = config.getboolean('bitbar','runAvailable')
-
+    
     ###############################
     # Upload app and test files
     ###############################
-    app_file_id = testdroid.upload_file(filename=args.app_file)['id']
-    test_file_id = testdroid.upload_file(filename=args.test_file)['id']    
+    testdroid = Testdroid(apikey=bitbar_api_key, url="https://cloud.bitbar.com")
+    app_file_id = testdroid.upload_file(filename=app_file)['id']
+    test_file_id = testdroid.upload_file(filename=test_file)['id']
+    
     ###############################
     # Launch a test run
     ###############################

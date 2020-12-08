@@ -1,1 +1,1 @@
-from
+from bitbarconnector.run import bitbar

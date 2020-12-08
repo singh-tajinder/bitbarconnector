@@ -80,5 +80,3 @@ class bitbar:
         # Download results
         ###############################
         testdroid.download_test_run(projectId, testrun['id'])
-        
-bitbar.execute_test('config.ini')
